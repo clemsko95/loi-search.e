@@ -1,0 +1,66 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+
+export default function LawSearchApp() {
+  const [query, setQuery] = useState("");
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchLawExplanation = async () => {
+    if (!query.trim()) return;
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        "https://api.legifrance.gouv.fr/search",
+        {
+          query: query,
+          pageSize: 1
+        },
+        {
+          headers: {
+            "Authorization": Bearer YOUR_ACCESS_TOKEN,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      
+      if (res.data.results && res.data.results.length > 0) {
+        setResponse(res.data.results[0].title + " - " + res.data.results[0].content);
+      } else {
+        setResponse("Aucune information trouvée");
+      }
+    } catch (error) {
+      setResponse("Erreur lors de la récupération des données");
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ textAlign: "center", padding: "20px", fontFamily: "Arial" }}>
+      <h1>📜 Recherche de Loi Simplifiée</h1>
+      <input
+        type="text"
+        placeholder="Tapez un mot-clé (ex: ambulance priorité)"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        style={{ padding: "10px", width: "300px", marginBottom: "10px" }}
+      />
+      <br />
+      <Button
+        onClick={fetchLawExplanation}
+        disabled={loading}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+      >
+        {loading ? "Recherche..." : "Rechercher"}
+      </Button>
+      <div style={{ marginTop: "20px", textAlign: "left", maxWidth: "600px", margin: "auto" }}>
+        {response && (
+          <div style={{ backgroundColor: "#f8f9fa", padding: "15px", borderRadius: "5px" }}>
+            <p>{response}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

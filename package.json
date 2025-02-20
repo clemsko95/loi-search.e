@@ -1,0 +1,19 @@
+{
+  "name": "loi-search",
+  "version": "1.0.0",
+  "description": "Un site qui simplifie les lois françaises avec l'IA",
+  "main": "App.js",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "next": "latest"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "Ton Nom",
+  "license": "MIT"
+}
